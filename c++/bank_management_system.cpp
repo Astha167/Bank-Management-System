@@ -17,71 +17,95 @@ class Account{
       void search_user();
 };
 
+
 void Account::read() {
     cout << "Enter the number of data: ";
     cin >> n;
-    string id = "20";      
-    string br = "10100";   
-    if(n<=100){
-    for (int i = 0; i < n; i++) {
-        bool isUnique = true;
-        char c[5];  
-        string account_number;
+    string id = "20";
+    string br = "10100";
 
-        do {
-            isUnique = true;  
-            cout << "Enter last 5 digits of your Account number: ";
+    if (n <= 100) {
+        for (int i = 0; i < n; i++) {
+            bool isUnique = true;
+            char c[5];  // To store the last 5 digits of the account number
+            string account_number;
 
-            
-            for (int j = 0; j < 5; j++) {
-                cin >> c[j];
-            }
+            do {
+                isUnique = true;
+                cout << "Enter last 5 digits of your Account number: ";
 
-            // Check if the digits within 'c' are unique
-            for (int j = 0; j < 5; j++) {
-                for (int k = j + 1; k < 5; k++) {  // Compare each digit with subsequent digits
-                    if (c[j] == c[k]) {
-                        isUnique = false;
-                        cout << "Account number digits are not unique. Please try again." << endl;
+                for (int j = 0; j < 5; j++) {
+                    cin >> c[j];
+                }
+
+                // Check if the digits within 'c' are unique
+                for (int j = 0; j < 5; j++) {
+                    for (int k = j + 1; k < 5; k++) {
+                        if (c[j] == c[k]) {
+                            isUnique = false;
+                            cout << "Account number digits are not unique. Please try again." << endl;
+                            break;
+                        }
+                    }
+                    if (!isUnique) break;
+                }
+
+                // Generate the full account number from the unique digits
+                if (isUnique) {
+                    account_number = id + br + string(c, 5);  // Corrected string construction
+
+                    // Check if the account number already exists in the array
+                    for (int j = 0; j < i; j++) {
+                        if (Acc[j] == account_number) {
+                            isUnique = false;
+                            cout << "Account number already exists. Please enter a new one." << endl;
+                            break;
+                        }
+                    }
+                }
+
+            } while (!isUnique);
+
+            Acc[i] = account_number;
+
+            // Collect other details after ensuring the account number is unique
+            cout << "Enter name: ";
+            cin.ignore();  // Clear the input buffer to avoid issues with getline
+            getline(cin, name[i]);
+
+            cout << "Enter balance: ";
+            cin >> balance[i];
+            cin.ignore();  // Clear the input buffer again after cin
+
+            // Phone number input and validation
+            string phone_number;
+            bool validPhone;
+            do {
+                validPhone = true;
+                cout << "Enter registered phone number (10 digits): ";
+                cin >> phone_number;
+
+                // Check if the phone number is exactly 10 digits
+                if (phone_number.length() != 10) {
+                    cout << "Phone number must be exactly 10 digits. Please try again." << endl;
+                    validPhone = false;
+                }
+
+                // Check if the input contains only digits
+                for (char digit : phone_number) {
+                    if (!isdigit(digit)) {
+                        cout << "Phone number must contain only digits. Please try again." << endl;
+                        validPhone = false;
                         break;
                     }
                 }
-                if (!isUnique) break;  // Exit the loop if a duplicate digit is found
-            }
+            } while (!validPhone);
 
-            // Generate the full account number from the unique digits
-            if (isUnique) {
-                account_number = id + br + string(c, 5);
-
-                // Check if the account number already exists in the array
-                for (int j = 0; j < i; j++) {
-                    if (Acc[j] == account_number) {
-                        isUnique = false;
-                        cout << "Account number already exists. Please enter a new one." << endl;
-                        break;
-                    }
-                }
-            }
-
-        } while (!isUnique);  // Repeat until the account number is both unique in digits and not a duplicate in the array
-
-        // If the account number is unique, store it in the array
-        Acc[i] = account_number;
-
-        // Collect other details after ensuring the account number is unique
-        cout << "Enter name: ";
-        cin.ignore();  // Clear the newline character left by previous cin
-        getline(cin, name[i]);
-
-        cout << "Enter balance: ";
-        cin >> balance[i];
-
-        cout << "Enter registered phone number: ";
-        cin >> phone[i];
+            phone[i] = phone_number;  // Store the validated phone number
+        }
+    } else {
+        cout << "Our bank has a limit of 100 users only." << endl;
     }
-}
-  else{
-    cout<<"Our bank has the limit of 100 users only"l
 }
 
 void Account::display(){
