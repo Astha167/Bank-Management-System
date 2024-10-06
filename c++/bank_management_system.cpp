@@ -151,19 +151,55 @@ void Account::del_user(){
     cout<<"Account not found."<<endl;
 }
 
+void Account::search_user() {
+    string input_IFSC;
+    cout << "Enter IFSC code: ";
+    cin >> input_IFSC;
+
+    if (input_IFSC != IFSC_CODE) {
+        cout << "Invalid IFSC code." << endl;
+        return;
+    }
+
+    string last5;
+    cout << "Enter last 5 digits of your account number: ";
+    cin >> last5;
+
+    bool found = false;
+    for (int i = 0; i < userCount; i++) {
+        if (Acc[i].size() >= 12) { // Ensure account number has at least 12 characters
+            string acc_last5 = Acc[i].substr(7); // Slice from index 7 to get last 5 digits
+            if (acc_last5 == last5) {
+                found = true;
+                break;
+            }
+        }
+    }
+
+    if (found) {
+        cout << "Account number is present." << endl;
+    } else {
+        cout << "Account number is absent." << endl;
+    }
+}
+
 int main() {
     Account account;
     int choice;
-    while(true){
-        cout<<"1. Read data"<<endl;
-        cout<<"2. Display data"<<endl;
-        cout<<"3. Withdraw"<<endl;
-        cout<<"4. Deposit"<<endl;
-        cout<<"5. Delete user"<<endl;
-        cout<<"6. Exit"<<endl;
-        cout<<"Enter your choice: ";
-        cin>>choice;
-        switch(choice){
+
+    while (true) {
+        cout << "\n=== Bank Account Management System ===\n";
+        cout << "1. Create Accounts\n";
+        cout << "2. Display All Accounts\n";
+        cout << "3. Withdraw Money\n";
+        cout << "4. Deposit Money\n";
+        cout << "5. Delete Account\n";
+        cout << "6. Search Account Record\n";
+        cout << "7. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
             case 1:
                 account.read();
                 break;
@@ -180,10 +216,15 @@ int main() {
                 account.del_user();
                 break;
             case 6:
+                account.search_user();
+                break;
+            case 7:
+                cout << "Exiting the program. Thank you!" << endl;
                 return 0;
             default:
-                cout<<"Invalid choice. Please try again."<<endl;
+                cout << "Invalid choice. Please try again." << endl;
         }
     }
+
     return 0;
 }
