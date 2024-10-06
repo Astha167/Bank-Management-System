@@ -14,6 +14,7 @@ class Account{
       void withdraw();
       void deposit();
       void del_user();
+      void search_user();
 };
 
 void Account::read() {
