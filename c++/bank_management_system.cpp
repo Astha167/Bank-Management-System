@@ -1,212 +1,187 @@
 #include <iostream>
-#include<string>
+#include <string>
+
 using namespace std;
 
-class Account{
+// Base class for common account functionalities
+class BaseAccount {
+protected:  // Changed to protected to allow access in the derived class
     string Acc[100];
     string name[100];
-    int balance[100];
-    long long int phone[100];
-    public:
-      int n;
-      void read();
-      void display();
-      void withdraw();
-      void deposit();
-      void del_user();
-      void search_user();
+    float balance[100];
+    string phone[100];
+    int n;
+
+public:
+    // Common methods that can be used in derived class
+    void read() {
+        cout << "Enter the number of data: ";
+        cin >> n;
+        string id = "20";
+        string br = "10100";
+
+        if (n <= 100) {
+            for (int i = 0; i < n; i++) {
+                bool isUnique = true;
+                char c[5];  // To store the last 5 digits of the account number
+                string account_number;
+
+                do {
+                    isUnique = true;
+                    cout << "Enter last 5 digits of your Account number: ";
+
+                    for (int j = 0; j < 5; j++) {
+                        cin >> c[j];
+                    }
+
+                    // Check if the digits within 'c' are unique
+                    for (int j = 0; j < 5; j++) {
+                        for (int k = j + 1; k < 5; k++) {
+                            if (c[j] == c[k]) {
+                                isUnique = false;
+                                cout << "Account number digits are not unique. Please try again." << endl;
+                                break;
+                            }
+                        }
+                        if (!isUnique) break;
+                    }
+
+                    // Generate the full account number from the unique digits
+                    if (isUnique) {
+                        account_number = id + br + string(c, 5);  // Corrected string construction
+
+                        // Check if the account number already exists in the array
+                        for (int j = 0; j < i; j++) {
+                            if (Acc[j] == account_number) {
+                                isUnique = false;
+                                cout << "Account number already exists. Please enter a new one." << endl;
+                                break;
+                            }
+                        }
+                    }
+
+                } while (!isUnique);
+
+                Acc[i] = account_number;
+
+                // Collect other details after ensuring the account number is unique
+                cout << "Enter name: ";
+                cin.ignore();  // Clear the input buffer to avoid issues with getline
+                getline(cin, name[i]);
+
+                cout << "Enter balance: ";
+                cin >> balance[i];
+                cin.ignore();  // Clear the input buffer again after cin
+
+                // Phone number input and validation
+                string phone_number;
+                bool validPhone;
+                do {
+                    validPhone = true;
+                    cout << "Enter registered phone number (10 digits): ";
+                    cin >> phone_number;
+
+                    // Check if the phone number is exactly 10 digits
+                    if (phone_number.length() != 10) {
+                        cout << "Phone number must be exactly 10 digits. Please try again." << endl;
+                        validPhone = false;
+                    }
+
+                    // Check if the input contains only digits
+                    for (char digit : phone_number) {
+                        if (!isdigit(digit)) {
+                            cout << "Phone number must contain only digits. Please try again." << endl;
+                            validPhone = false;
+                            break;
+                        }
+                    }
+                } while (!validPhone);
+
+                phone[i] = phone_number;  // Store the validated phone number
+            }
+        } else {
+            cout << "Our bank has a limit of 100 users only." << endl;
+        }
+    }
+
+    void display() {
+        for (int i = 0; i < n; i++) {
+            cout << "Account Number: " << Acc[i] << endl;
+            cout << "Name: " << name[i] << endl;
+            cout << "Balance: " << balance[i] << endl;
+            cout << "Phone Number: " << phone[i] << endl;
+            cout << endl;
+        }
+    }
+
+    // Method for withdrawing money
+    void withdraw(string acc, int withdrawAmount) {
+        for (int i = 0; i < n; i++) {
+            if (Acc[i] == acc) {
+                if (balance[i] >= withdrawAmount) {
+                    balance[i] -= withdrawAmount;
+                    cout << "Withdrawal successful. New balance: " << balance[i] << endl;
+                } else {
+                    cout << "Insufficient balance." << endl;
+                }
+                return;
+            }
+        }
+        cout << "Account not found." << endl;
+    }
+
+    // Method for depositing money
+    void deposit(string acc, int depositAmount) {
+        for (int i = 0; i < n; i++) {
+            if (Acc[i] == acc) {
+                balance[i] += depositAmount;
+                cout << "Deposit successful. New balance: " << balance[i] << endl;
+                return;
+            }
+        }
+        cout << "Account not found." << endl;
+    }
 };
 
-
-void Account::read() {
-    cout << "Enter the number of data: ";
-    cin >> n;
-    string id = "20";
-    string br = "10100";
-
-    if (n <= 100) {
+// Derived class from BaseAccount
+class Account : public BaseAccount {
+public:
+    // Specific methods for account management
+    void del_user() {
+        string acc;
+        cout << "Enter account number to delete: ";
+        cin >> acc;
         for (int i = 0; i < n; i++) {
-            bool isUnique = true;
-            char c[5];  // To store the last 5 digits of the account number
-            string account_number;
-
-            do {
-                isUnique = true;
-                cout << "Enter last 5 digits of your Account number: ";
-
-                for (int j = 0; j < 5; j++) {
-                    cin >> c[j];
+            if (Acc[i] == acc) {
+                for (int j = i; j < n - 1; j++) {
+                    Acc[j] = Acc[j + 1];
+                    name[j] = name[j + 1];
+                    balance[j] = balance[j + 1];
+                    phone[j] = phone[j + 1];
                 }
-
-                // Check if the digits within 'c' are unique
-                for (int j = 0; j < 5; j++) {
-                    for (int k = j + 1; k < 5; k++) {
-                        if (c[j] == c[k]) {
-                            isUnique = false;
-                            cout << "Account number digits are not unique. Please try again." << endl;
-                            break;
-                        }
-                    }
-                    if (!isUnique) break;
-                }
-
-                // Generate the full account number from the unique digits
-                if (isUnique) {
-                    account_number = id + br + string(c, 5);  // Corrected string construction
-
-                    // Check if the account number already exists in the array
-                    for (int j = 0; j < i; j++) {
-                        if (Acc[j] == account_number) {
-                            isUnique = false;
-                            cout << "Account number already exists. Please enter a new one." << endl;
-                            break;
-                        }
-                    }
-                }
-
-            } while (!isUnique);
-
-            Acc[i] = account_number;
-
-            // Collect other details after ensuring the account number is unique
-            cout << "Enter name: ";
-            cin.ignore();  // Clear the input buffer to avoid issues with getline
-            getline(cin, name[i]);
-
-            cout << "Enter balance: ";
-            cin >> balance[i];
-            cin.ignore();  // Clear the input buffer again after cin
-
-            // Phone number input and validation
-            string phone_number;
-            bool validPhone;
-            do {
-                validPhone = true;
-                cout << "Enter registered phone number (10 digits): ";
-                cin >> phone_number;
-
-                // Check if the phone number is exactly 10 digits
-                if (phone_number.length() != 10) {
-                    cout << "Phone number must be exactly 10 digits. Please try again." << endl;
-                    validPhone = false;
-                }
-
-                // Check if the input contains only digits
-                for (char digit : phone_number) {
-                    if (!isdigit(digit)) {
-                        cout << "Phone number must contain only digits. Please try again." << endl;
-                        validPhone = false;
-                        break;
-                    }
-                }
-            } while (!validPhone);
-
-            phone[i] = phone_number;  // Store the validated phone number
-        }
-    } else {
-        cout << "Our bank has a limit of 100 users only." << endl;
-    }
-}
-
-void Account::display(){
-    for (int i=0;i<n;i++){
-        cout<<"Account Number: "<<Acc[i]<<endl;
-        cout<<"Name: "<<name[i]<<endl;
-        cout<<"Balance: "<<balance[i]<<endl;
-        cout<<"Phone Number: "<<phone[i]<<endl;
-        cout<<endl;
-    }
-}
-
-void Account::withdraw(){
-    string acc;
-    int amount;
-    cout<<"Enter account number: ";
-    cin>>acc;
-    cout<<"Enter amount to withdraw: ";
-    cin>>amount;
-    for(int i=0;i<n;i++){
-        if(Acc[i]==acc){
-            if(balance[i]>=amount){
-                balance[i]-=amount;
-                cout<<"Withdrawal successful. New balance: "<<balance[i]<<endl;
-            }else{
-                cout<<"Insufficient balance."<<endl;
-            }
-            return;
-        }
-    }
-    cout<<"Account not found."<<endl;
-}
-
-void Account::deposit(){
-    string acc;
-    int amount;
-    cout<<"Enter account number: ";
-    cin>>acc;
-    cout<<"Enter amount to deposit: ";
-    cin>>amount;
-    for(int i=0;i<n;i++){
-        if(Acc[i]==acc){
-            balance[i]+=amount;
-            cout<<"Deposit successful. New balance: "<<balance[i]<<endl;
-            return;
-        }
-    }
-    cout<<"Account not found."<<endl;
-}
-
-void Account::del_user(){
-    string acc;
-    cout<<"Enter account number to delete: ";
-    cin>>acc;
-    for(int i=0;i<n;i++){
-        if(Acc[i]==acc){
-            for(int j=i;j<n-1;j++){
-                Acc[j]=Acc[j+1];
-                name[j]=name[j+1];
-                balance[j]=balance[j+1];
-                phone[j]=phone[j+1];
-            }
-            n--;
-            cout<<"Account deleted successfully."<<endl;
-            return;
-        }
-    }
-    cout<<"Account not found."<<endl;
-}
-
-void Account::search_user() {
-    string input_IFSC;
-    cout << "Enter IFSC code: ";
-    cin >> input_IFSC;
-
-    if (input_IFSC != IFSC_CODE) {
-        cout << "Invalid IFSC code." << endl;
-        return;
-    }
-
-    string last5;
-    cout << "Enter last 5 digits of your account number: ";
-    cin >> last5;
-
-    bool found = false;
-    for (int i = 0; i < userCount; i++) {
-        if (Acc[i].size() >= 12) { // Ensure account number has at least 12 characters
-            string acc_last5 = Acc[i].substr(7); // Slice from index 7 to get last 5 digits
-            if (acc_last5 == last5) {
-                found = true;
-                break;
+                n--;
+                cout << "Account deleted successfully." << endl;
+                return;
             }
         }
+        cout << "Account not found." << endl;
     }
 
-    if (found) {
-        cout << "Account number is present." << endl;
-    } else {
-        cout << "Account number is absent." << endl;
+    void search_user() {
+        string acc;
+        cout << "Enter account number to search: ";
+        cin >> acc;
+        for (int i = 0; i < n; i++) {
+            if (Acc[i] == acc) {
+                cout << "Account found!" << endl;
+                cout << "Name: " << name[i] << endl;
+                cout << "Balance: " << balance[i] << endl;
+                return;
+            }
+        }
+        cout << "Account not found." << endl;
     }
-}
+};
 
 int main() {
     Account account;
@@ -231,12 +206,26 @@ int main() {
             case 2:
                 account.display();
                 break;
-            case 3:
-                account.withdraw();
+            case 3: {
+                string acc;
+                int amount;
+                cout << "Enter account number: ";
+                cin >> acc;
+                cout << "Enter amount to withdraw: ";
+                cin >> amount;
+                account.withdraw(acc, amount);  // Call withdraw method
                 break;
-            case 4:
-                account.deposit();
+            }
+            case 4: {
+                string acc;
+                int amount;
+                cout << "Enter account number: ";
+                cin >> acc;
+                cout << "Enter amount to deposit: ";
+                cin >> amount;
+                account.deposit(acc, amount);  // Call deposit method
                 break;
+            }
             case 5:
                 account.del_user();
                 break;
