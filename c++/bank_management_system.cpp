@@ -115,31 +115,35 @@ public:
     }
 
     // Method for withdrawing money
-    void withdraw(string acc, int withdrawAmount) {
+    
+    void amount(string acc, float amount) {
         for (int i = 0; i < n; i++) {
             if (Acc[i] == acc) {
-                if (balance[i] >= withdrawAmount) {
-                    balance[i] -= withdrawAmount;
-                    cout << "Withdrawal successful. New balance: " << balance[i] << endl;
-                } else {
-                    cout << "Insufficient balance." << endl;
-                }
+                balance[i] += amount;
+                cout << "Deposit successful. New balance: " << balance[i] << endl;
                 return;
             }
         }
         cout << "Account not found." << endl;
     }
 
-    // Method for depositing money
-    void deposit(string acc, int depositAmount) {
-        for (int i = 0; i < n; i++) {
-            if (Acc[i] == acc) {
-                balance[i] += depositAmount;
-                cout << "Deposit successful. New balance: " << balance[i] << endl;
-                return;
+    void amount(string acc, float amount, char type) {
+        if (type == 'w') {
+            for (int i = 0; i < n; i++) {
+                if (Acc[i] == acc) {
+                    if (balance[i] >= amount) {
+                        balance[i] -= amount;
+                        cout << "Withdrawal successful. New balance: " << balance[i] << endl;
+                    } else {
+                        cout << "Insufficient balance." << endl;
+                    }
+                    return;
+                }
             }
+            cout << "Account not found." << endl;
+        } else {
+            cout << "Invalid transaction type." << endl;
         }
-        cout << "Account not found." << endl;
     }
 };
 
@@ -181,7 +185,48 @@ public:
         }
         cout << "Account not found." << endl;
     }
+ // 2. Overloaded function to edit name directly
+    void edit_user(string acc, string new_name) {
+        for (int i = 0; i < n; i++) {
+            if (Acc[i] == acc) {
+                name[i] = new_name;
+                cout << "Name updated successfully." << endl;
+                return;
+            }
+        }
+        cout << "Account not found." << endl;
+    }
+
+    // 3. Overloaded function to edit phone number directly
+    void edit_user(string acc, string new_phone, bool isPhone) {
+        if (!isPhone) {
+            cout << "Invalid parameter for phone editing." << endl;
+            return;
+        }
+        // Validate new_phone
+        if (new_phone.length() != 10) {
+            cout << "Phone number must be exactly 10 digits." << endl;
+            return;
+        }
+        for (char digit : new_phone) {
+            if (!isdigit(digit)) {
+                cout << "Phone number must contain only digits." << endl;
+                return;
+            }
+        }
+
+        for (int i = 0; i < n; i++) {
+            if (Acc[i] == acc) {
+                phone[i] = new_phone;
+                cout << "Phone number updated successfully." << endl;
+                return;
+            }
+        }
+        cout << "Account not found." << endl;
+    }
+
 };
+
 
 int main() {
     Account account;
@@ -208,22 +253,22 @@ int main() {
                 break;
             case 3: {
                 string acc;
-                int amount;
+                float amount;
                 cout << "Enter account number: ";
                 cin >> acc;
                 cout << "Enter amount to withdraw: ";
                 cin >> amount;
-                account.withdraw(acc, amount);  // Call withdraw method
+                account.amount(acc, amount, 'w');  // Call amount method with 'w' for withdrawal
                 break;
             }
             case 4: {
                 string acc;
-                int amount;
+                float amount;
                 cout << "Enter account number: ";
                 cin >> acc;
                 cout << "Enter amount to deposit: ";
                 cin >> amount;
-                account.deposit(acc, amount);  // Call deposit method
+                account.amount(acc, amount);  // Call amount method for deposit
                 break;
             }
             case 5:
