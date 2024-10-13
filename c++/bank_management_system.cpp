@@ -3,9 +3,8 @@
 
 using namespace std;
 
-// Base class for common account functionalities
 class BaseAccount {
-protected:  // Changed to protected to allow access in the derived class
+protected:
     string Acc[100];
     string name[100];
     float balance[100];
@@ -13,7 +12,6 @@ protected:  // Changed to protected to allow access in the derived class
     int n;
 
 public:
-    // Common methods that can be used in derived class
     void read() {
         cout << "Enter the number of data: ";
         cin >> n;
@@ -23,7 +21,7 @@ public:
         if (n <= 100) {
             for (int i = 0; i < n; i++) {
                 bool isUnique = true;
-                char c[5];  // To store the last 5 digits of the account number
+                char c[5];
                 string account_number;
 
                 do {
@@ -34,7 +32,6 @@ public:
                         cin >> c[j];
                     }
 
-                    // Check if the digits within 'c' are unique
                     for (int j = 0; j < 5; j++) {
                         for (int k = j + 1; k < 5; k++) {
                             if (c[j] == c[k]) {
@@ -46,11 +43,9 @@ public:
                         if (!isUnique) break;
                     }
 
-                    // Generate the full account number from the unique digits
                     if (isUnique) {
-                        account_number = id + br + string(c, 5);  // Corrected string construction
+                        account_number = id + br + string(c, 5);
 
-                        // Check if the account number already exists in the array
                         for (int j = 0; j < i; j++) {
                             if (Acc[j] == account_number) {
                                 isUnique = false;
@@ -64,16 +59,14 @@ public:
 
                 Acc[i] = account_number;
 
-                // Collect other details after ensuring the account number is unique
                 cout << "Enter name: ";
-                cin.ignore();  // Clear the input buffer to avoid issues with getline
+                cin.ignore();
                 getline(cin, name[i]);
 
                 cout << "Enter balance: ";
                 cin >> balance[i];
-                cin.ignore();  // Clear the input buffer again after cin
+                cin.ignore();
 
-                // Phone number input and validation
                 string phone_number;
                 bool validPhone;
                 do {
@@ -81,13 +74,11 @@ public:
                     cout << "Enter registered phone number (10 digits): ";
                     cin >> phone_number;
 
-                    // Check if the phone number is exactly 10 digits
                     if (phone_number.length() != 10) {
                         cout << "Phone number must be exactly 10 digits. Please try again." << endl;
                         validPhone = false;
                     }
 
-                    // Check if the input contains only digits
                     for (char digit : phone_number) {
                         if (!isdigit(digit)) {
                             cout << "Phone number must contain only digits. Please try again." << endl;
@@ -97,7 +88,7 @@ public:
                     }
                 } while (!validPhone);
 
-                phone[i] = phone_number;  // Store the validated phone number
+                phone[i] = phone_number;
             }
         } else {
             cout << "Our bank has a limit of 100 users only." << endl;
@@ -114,8 +105,6 @@ public:
         }
     }
 
-    // Method for withdrawing money
-    
     void amount(string acc, float amount) {
         for (int i = 0; i < n; i++) {
             if (Acc[i] == acc) {
@@ -147,10 +136,8 @@ public:
     }
 };
 
-// Derived class from BaseAccount
 class Account : public BaseAccount {
 public:
-    // Specific methods for account management
     void del_user() {
         string acc;
         cout << "Enter account number to delete: ";
@@ -185,7 +172,7 @@ public:
         }
         cout << "Account not found." << endl;
     }
- // 2. Overloaded function to edit name directly
+
     void edit_user(string acc, string new_name) {
         for (int i = 0; i < n; i++) {
             if (Acc[i] == acc) {
@@ -197,13 +184,11 @@ public:
         cout << "Account not found." << endl;
     }
 
-    // 3. Overloaded function to edit phone number directly
     void edit_user(string acc, string new_phone, bool isPhone) {
         if (!isPhone) {
             cout << "Invalid parameter for phone editing." << endl;
             return;
         }
-        // Validate new_phone
         if (new_phone.length() != 10) {
             cout << "Phone number must be exactly 10 digits." << endl;
             return;
@@ -224,9 +209,7 @@ public:
         }
         cout << "Account not found." << endl;
     }
-
 };
-
 
 int main() {
     Account account;
@@ -240,7 +223,8 @@ int main() {
         cout << "4. Deposit Money\n";
         cout << "5. Delete Account\n";
         cout << "6. Search Account Record\n";
-        cout << "7. Exit\n";
+        cout << "7. Edit Account (Name/Phone)\n";
+        cout << "8. Exit\n";
         cout << "Enter your choice: ";
         cin >> choice;
 
@@ -258,7 +242,7 @@ int main() {
                 cin >> acc;
                 cout << "Enter amount to withdraw: ";
                 cin >> amount;
-                account.amount(acc, amount, 'w');  // Call amount method with 'w' for withdrawal
+                account.amount(acc, amount, 'w');
                 break;
             }
             case 4: {
@@ -268,7 +252,7 @@ int main() {
                 cin >> acc;
                 cout << "Enter amount to deposit: ";
                 cin >> amount;
-                account.amount(acc, amount);  // Call amount method for deposit
+                account.amount(acc, amount);
                 break;
             }
             case 5:
@@ -277,7 +261,32 @@ int main() {
             case 6:
                 account.search_user();
                 break;
-            case 7:
+            case 7: {
+                string acc, new_value;
+                int edit_choice;
+                cout << "Enter account number to edit: ";
+                cin >> acc;
+                cout << "What would you like to edit?\n";
+                cout << "1. Edit Name\n";
+                cout << "2. Edit Phone Number\n";
+                cout << "Enter your choice: ";
+                cin >> edit_choice;
+
+                if (edit_choice == 1) {
+                    cout << "Enter new name: ";
+                    cin.ignore();
+                    getline(cin, new_value);
+                    account.edit_user(acc, new_value);
+                } else if (edit_choice == 2) {
+                    cout << "Enter new phone number (10 digits): ";
+                    cin >> new_value;
+                    account.edit_user(acc, new_value, true);
+                } else {
+                    cout << "Invalid choice. Returning to the main menu." << endl;
+                }
+                break;
+            }
+            case 8:
                 cout << "Exiting the program. Thank you!" << endl;
                 return 0;
             default:
