@@ -104,36 +104,6 @@ public:
             cout << endl;
         }
     }
-
-    void amount(string acc, float amount) {
-        for (int i = 0; i < n; i++) {
-            if (Acc[i] == acc) {
-                balance[i] += amount;
-                cout << "Deposit successful. New balance: " << balance[i] << endl;
-                return;
-            }
-        }
-        cout << "Account not found." << endl;
-    }
-
-    void amount(string acc, float amount, char type) {
-        if (type == 'w') {
-            for (int i = 0; i < n; i++) {
-                if (Acc[i] == acc) {
-                    if (balance[i] >= amount) {
-                        balance[i] -= amount;
-                        cout << "Withdrawal successful. New balance: " << balance[i] << endl;
-                    } else {
-                        cout << "Insufficient balance." << endl;
-                    }
-                    return;
-                }
-            }
-            cout << "Account not found." << endl;
-        } else {
-            cout << "Invalid transaction type." << endl;
-        }
-    }
 };
 
 class Account : public BaseAccount {
@@ -209,6 +179,101 @@ public:
         }
         cout << "Account not found." << endl;
     }
+};
+
+class Transaction:public BaseAccount{
+    void amount(string acc, float amount) {
+        for (int i = 0; i < n; i++) {
+            if (Acc[i] == acc) {
+                balance[i] += amount;
+                cout << "Deposit successful. New balance: " << balance[i] << endl;
+                return;
+            }
+        }
+        cout << "Account not found." << endl;
+    }
+
+    void amount(string acc, float amount, char type) {
+        if (type == 'w') {
+            for (int i = 0; i < n; i++) {
+                if (Acc[i] == acc) {
+                    if (balance[i] >= amount) {
+                        balance[i] -= amount;
+                        cout << "Withdrawal successful. New balance: " << balance[i] << endl;
+                    } else {
+                        cout << "Insufficient balance." << endl;
+                    }
+                    return;
+                }
+            }
+            cout << "Account not found." << endl;
+        } else {
+            cout << "Invalid transaction type." << endl;
+        }
+    }
+void transfer() {
+        string sender_acc, receiver_acc;
+        float amount;
+        bool sender_found = false, receiver_found = false;
+
+        // Input and validate sender's account number
+        cout << "Enter sender's account number: ";
+        cin >> sender_acc;
+
+        int sender_index = -1;  // Track index of sender's account
+        for (int i = 0; i < n; i++) {
+            if (Acc[i] == sender_acc) {
+                sender_found = true;
+                sender_index = i;
+                break;
+            }
+        }
+
+        if (!sender_found) {
+            // Error handling: sender's account does not exist
+            cout << "Error: Sender's account number does not exist." << endl;
+            return;
+        }
+
+        // Input and validate receiver's account number
+        cout << "Enter receiver's account number: ";
+        cin >> receiver_acc;
+
+        int receiver_index = -1;  // Track index of receiver's account
+        for (int i = 0; i < n; i++) {
+            if (Acc[i] == receiver_acc) {
+                receiver_found = true;
+                receiver_index = i;
+                break;
+            }
+        }
+
+        if (!receiver_found) {
+            // Error handling: receiver's account does not exist
+            cout << "Error: Receiver's account number does not exist." << endl;
+            return;
+        }
+
+        // Input the transfer amount
+        cout << "Enter the amount to transfer: ";
+        cin >> amount;
+
+        // Error handling: Check if the sender has enough balance
+        if (balance[sender_index] < amount) {
+            cout << "Error: Insufficient balance in sender's account." << endl;
+            return;
+        }
+
+        // Perform the transfer: deduct from sender and add to receiver
+        balance[sender_index] -= amount;
+        balance[receiver_index] += amount;
+
+        // Display successful transfer message
+        cout << "Transfer successful!" << endl;
+        cout << "Sender's new balance: " << balance[sender_index] << endl;
+        cout << "Receiver's new balance: " << balance[receiver_index] << endl;
+    }
+
 };
 
 int main() {
