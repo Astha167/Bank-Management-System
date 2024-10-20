@@ -68,32 +68,8 @@ public:
                 cin.ignore();
 
                 string ph;
-                bool validph;
-                do {
-                    validph = true;
-                    cout << "Enter registered phone number (10 digits): ";
-                    cin >> ph;
 
-                    if (ph.length() != 10) {
-                        cout << "Phone number must be exactly 10 digits. Please try again." << endl;
-                        validph = false;
-                    }
-
-                    for (char digit : ph) {
-                        if (!isdigit(digit)) {
-                            cout << "Phone number must contain only digits. Please try again." << endl;
-                            validph = false;
-                            break;
-                        }
-                    }
-                } while (!validph);
-
-                phone[i] = ph;
-            }
-        } else {
-            cout << "Our bank has a limit of 100 users only." << endl;
-        }
-    }
+                   
 
     void display() {
         for (int i = 0; i < n; i++) {
@@ -186,11 +162,11 @@ class Transaction:public BaseAccount{
         for (int i = 0; i < n; i++) {
             if (Acc[i] == acc) {
                 balance[i] += amount;
-                cout << "Deposit successful. New balance: " << balance[i] << endl;
-                return;
-            }
+                cout << "Amount credited successfully in your account" << endl;
+                cout<<"Current account balance:"<<<< balance[i]<<endl;
+                }
         }
-        cout << "Account not found." << endl;
+        cout << "This account is not registered with us." << endl;
     }
 
     void amount(string acc, float amount, char type) {
@@ -199,7 +175,7 @@ class Transaction:public BaseAccount{
                 if (Acc[i] == acc) {
                     if (balance[i] >= amount) {
                         balance[i] -= amount;
-                        cout << "Withdrawal successful. New balance: " << balance[i] << endl;
+                        cout << "Amount debited successfully from your c." << balance[i] << endl;
                     } else {
                         cout << "Insufficient balance." << endl;
                     }
