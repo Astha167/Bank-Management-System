@@ -68,6 +68,32 @@ public:
                 cin.ignore();
 
                 string ph;
+                bool validph;
+                do {
+                    validph = true;
+                    cout << "Enter registered phone number (10 digits): ";
+                    cin >> ph;
+
+                    if (ph.length() != 10) {
+                        cout << "Phone number must be exactly 10 digits. Please try again." << endl;
+                        validph = false;
+                    }
+
+                    for (char digit : ph) {
+                        if (!isdigit(digit)) {
+                            cout << "Phone number must contain only digits. Please try again." << endl;
+                            validph = false;
+                            break;
+                        }
+                    }
+                } while (!validph);
+
+                phone[i] = ph;
+            }
+        } else {
+            cout << "Our bank has a limit of 100 users only." << endl;
+        }
+    }
 
                    
 
