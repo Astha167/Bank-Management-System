@@ -288,29 +288,32 @@ void transfer() {
 };
 
 int main() {
-    Account account;
+    Account a;
+    Transaction t;
     int choice;
     cout<<"\n----------------------Welcome to Cresta Bank----------------------"<<endl;
     while (true) {
         
         cout << "\n=== Bank Account Management System ===\n";
-        cout << "1. Create Accounts\n";
-        cout << "2. Display All Accounts\n";
-        cout << "3. Withdraw Money\n";
-        cout << "4. Deposit Money\n";
-        cout << "5. Delete Account\n";
-        cout << "6. Search Account Record\n";
-        cout << "7. Edit Account (Name/Phone)\n";
-        cout << "8. Exit\n";
-        cout << "Enter your choice: ";
+        cout << "1. Create Accounts"<<endl;
+        cout << "2. Display All Accounts"<<endl;
+        cout << "3. Withdraw Money"<<endl;
+        cout << "4. Deposit Money"<<endl;
+        cout << "5. Delete Account"<<endl;
+        cout << "6. Search Account Record"<<endl;
+        cout << "7. Edit Account (Name/Phone)"<<endl;
+        cout << "8. Transfer amount"<<endl;
+        cout<<  "9. Customer care details"<<endl;
+        cout << "10. Exit"<<endl;
+        cout << "Enter your choice(1-10) : "<<endl;
         cin >> choice;
 
         switch (choice) {
             case 1:
-                account.read();
+                a.read();
                 break;
             case 2:
-                account.display();
+                a.display();
                 break;
             case 3: {
                 string acc;
@@ -319,7 +322,7 @@ int main() {
                 cin >> acc;
                 cout << "Enter amount to withdraw: ";
                 cin >> amount;
-                account.amount(acc, amount, 'w');
+                t.amount(acc, amount, 'w');
                 break;
             }
             case 4: {
@@ -329,16 +332,16 @@ int main() {
                 cin >> acc;
                 cout << "Enter amount to deposit: ";
                 cin >> amount;
-                account.amount(acc, amount);
+                t.amount(acc, amount);
                 break;
             }
             case 5:
-                account.del_user();
+                a.del_user();
                 break;
             case 6:
-                account.search_user();
+                a.search_user();
                 break;
-            case 7: {
+            case 7: 
                 string acc, new_value;
                 int edit_choice;
                 cout << "Enter account number to edit: ";
@@ -353,21 +356,30 @@ int main() {
                     cout << "Enter new name: ";
                     cin.ignore();
                     getline(cin, new_value);
-                    account.edit_user(acc, new_value);
+                    a.edit_user(acc, new_value);
                 } else if (edit_choice == 2) {
                     cout << "Enter new phone number (10 digits): ";
                     cin >> new_value;
-                    account.edit_user(acc, new_value, true);
+                    a.edit_user(acc, new_value, true);
                 } else {
                     cout << "Invalid choice. Returning to the main menu." << endl;
                 }
                 break;
-            }
+            
             case 8:
-                cout << "Exiting the program. Thank you!" << endl;
-                return 0;
+                t.transfer();
+                break;
+            case 9:
+                cout<<"CONTACT US  "<<endl<<endl;
+                cout<<"phone number: +020 6193 6255"<<endl;
+                cout<<"Email us at :    crestabankmanager@outlook.com";
+            break;
+            case 10:
+                cout << "Thank you for using our bank system . Have a nice day ahead!" << endl;
+                break;
             default:
                 cout << "Invalid choice. Please try again." << endl;
+            break;
         }
     }
 
