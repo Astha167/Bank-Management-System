@@ -67,25 +67,35 @@ public:
                 cin >> balance[i];
                 cin.ignore();
 
-                string phone_number;
-                bool validPhone;
+                string ph;
+                bool validPh;
                 do {
-                    validPhone = true;
+                    validPh = true;
                     cout << "Enter registered phone number (10 digits): ";
-                    cin >> phone_number;
+                    cin >> ph;
 
-                    if (phone_number.length() != 10) {
+                    if (ph.length() != 10) {
                         cout << "Phone number must be exactly 10 digits. Please try again." << endl;
-                        validPhone = false;
+                        validPh = false;
                     }
 
-                    for (char digit : phone_number) {
-                        if (!isdigit(digit)) {
-                            cout << "Phone number must contain only digits. Please try again." << endl;
-                            validPhone = false;
-                            break;
-                        }
-                    }
+            for (int i = 0; i < ph.length(); i++) {
+            if (!isdigit(ph[i])) {
+                cout << "Phone number must contain only digits. Please try again." << endl;
+                validPh = false;
+                break;
+            }
+        }
+
+                    if (validPh) {
+            for (int i = 0; i < MAX_ACCOUNTS; i++) {
+                if (phone[i] == phone_number) {
+                    cout << "This phone number is already linked to another account. Please try a different one." << endl;
+                    validPhone = false;
+                    break;
+                }
+            }
+        }
                 } while (!validPhone);
 
                 phone[i] = phone_number;
@@ -186,11 +196,11 @@ class Transaction:public BaseAccount{
         for (int i = 0; i < n; i++) {
             if (Acc[i] == acc) {
                 balance[i] += amount;
-                cout << "Deposit successful. New balance: " << balance[i] << endl;
-                return;
-            }
+                cout << "Amount credited successfully in your account" << endl;
+                cout<<"Current account balance:"<<<< balance[i]<<endl;
+                }
         }
-        cout << "Account not found." << endl;
+        cout << "This account is not registered with us." << endl;
     }
 
     void amount(string acc, float amount, char type) {
@@ -199,7 +209,7 @@ class Transaction:public BaseAccount{
                 if (Acc[i] == acc) {
                     if (balance[i] >= amount) {
                         balance[i] -= amount;
-                        cout << "Withdrawal successful. New balance: " << balance[i] << endl;
+                        cout << "Amount debited successfully from your c." << balance[i] << endl;
                     } else {
                         cout << "Insufficient balance." << endl;
                     }
