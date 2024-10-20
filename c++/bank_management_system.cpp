@@ -86,6 +86,15 @@ public:
                             break;
                         }
                     }
+                    if (validph) {
+            for (int i = 0; i <n; i++) {
+                if (phones[i] == ph) {
+                    cout << "This phone number is already linked to another account. Please try a different one." << endl;
+                    validph = false;
+                    break;
+                }
+            }
+        }
                 } while (!validph);
 
                 phone[i] = ph;
@@ -124,7 +133,7 @@ public:
                 }
                 n--;
                 cout << "Account deleted successfully." << endl;
-                return;
+                
             }
         }
         cout << "Account not found." << endl;
@@ -139,7 +148,7 @@ public:
                 cout << "Account found!" << endl;
                 cout << "Name: " << name[i] << endl;
                 cout << "Balance: " << balance[i] << endl;
-                return;
+                
             }
         }
         cout << "Account not found." << endl;
@@ -150,7 +159,7 @@ public:
             if (Acc[i] == acc) {
                 name[i] = new_name;
                 cout << "Name updated successfully." << endl;
-                return;
+                
             }
         }
         cout << "Account not found." << endl;
@@ -159,16 +168,16 @@ public:
     void edit_user(string acc, string new_ph, bool isPhone) {
         if (!isPhone) {
             cout << "Invalid parameter for phone editing." << endl;
-            return;
+            
         }
         if (new_ph.length() != 10) {
             cout << "Phone number must be exactly 10 digits." << endl;
-            return;
+            
         }
         for (char digit : new_ph) {
             if (!isdigit(digit)) {
                 cout << "Phone number must contain only digits." << endl;
-                return;
+                
             }
         }
 
@@ -176,7 +185,7 @@ public:
             if (Acc[i] == acc) {
                 phone[i] = new_ph;
                 cout << "Phone number updated successfully." << endl;
-                return;
+                
             }
         }
         cout << "Account not found." << endl;
@@ -201,14 +210,15 @@ class Transaction:public BaseAccount{
                 if (Acc[i] == acc) {
                     if (balance[i] >= amount) {
                         balance[i] -= amount;
-                        cout << "Amount debited successfully from your c." << balance[i] << endl;
+                        cout << "Amount debited successfully from your account." << endl;
+                        cout<<"Current account balance:"<<<< balance[i]<<endl;
                     } else {
                         cout << "Insufficient balance." << endl;
                     }
-                    return;
+                   
                 }
             }
-            cout << "Account not found." << endl;
+            cout << "This account is not registered with us." << endl;
         } else {
             cout << "Invalid transaction type." << endl;
         }
@@ -218,71 +228,71 @@ void transfer() {
         float amount;
         bool sender_found = false, receiver_found = false;
 
-        // Input and validate sender's account number
         cout << "Enter sender's account number: ";
         cin >> sender_acc;
 
-        int sender_index = -1;  // Track index of sender's account
+        int sender;  
         for (int i = 0; i < n; i++) {
             if (Acc[i] == sender_acc) {
                 sender_found = true;
-                sender_index = i;
+                sender= i;
                 break;
             }
         }
 
         if (!sender_found) {
-            // Error handling: sender's account does not exist
-            cout << "Error: Sender's account number does not exist." << endl;
-            return;
+            
+            cout << "Sender's account does not exist." << endl;
+            
         }
-
-        // Input and validate receiver's account number
+       else{
         cout << "Enter receiver's account number: ";
         cin >> receiver_acc;
 
-        int receiver_index = -1;  // Track index of receiver's account
+        int receiver; 
         for (int i = 0; i < n; i++) {
             if (Acc[i] == receiver_acc) {
                 receiver_found = true;
-                receiver_index = i;
+                receiver = i;
                 break;
             }
         }
 
         if (!receiver_found) {
-            // Error handling: receiver's account does not exist
-            cout << "Error: Receiver's account number does not exist." << endl;
-            return;
+            
+            cout << "Receiver's account does not exist." << endl;
+        
         }
-
-        // Input the transfer amount
+   else{
+        
         cout << "Enter the amount to transfer: ";
         cin >> amount;
 
-        // Error handling: Check if the sender has enough balance
-        if (balance[sender_index] < amount) {
-            cout << "Error: Insufficient balance in sender's account." << endl;
-            return;
+        if (balance[sender] < amount) {
+            cout << "Insufficient balance in sender's account." << endl;
+        
         }
+   else{
+        
+        balance[sender] -= amount;
+        balance[receiver] += amount;
 
-        // Perform the transfer: deduct from sender and add to receiver
-        balance[sender_index] -= amount;
-        balance[receiver_index] += amount;
-
-        // Display successful transfer message
+        
         cout << "Transfer successful!" << endl;
-        cout << "Sender's new balance: " << balance[sender_index] << endl;
-        cout << "Receiver's new balance: " << balance[receiver_index] << endl;
-    }
-
+        cout << "Sender's Current balance: " << balance[sender] << endl;
+        cout << "Receiver's Current balance: " << balance[receiver] << endl;
+                 }
+          }
+      }
+  }
 };
 
 int main() {
     Account account;
     int choice;
-
+    cout<<"\n----------------------Welcome to Cresta Bank----------------------"<<endl;
     while (true) {
+        
         cout << "\n=== Bank Account Management System ===\n";
         cout << "1. Create Accounts\n";
         cout << "2. Display All Accounts\n";
