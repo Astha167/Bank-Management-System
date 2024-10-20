@@ -3,7 +3,7 @@
 
 using namespace std;
 
-class BaseAcc {
+class BaseAccount {
 protected:
     string Acc[100];
     string name[100];
@@ -22,7 +22,7 @@ public:
             for (int i = 0; i < n; i++) {
                 bool isUnique = true;
                 char c[5];
-                string acc_num;
+                string account_number;
 
                 do {
                     isUnique = true;
@@ -44,10 +44,10 @@ public:
                     }
 
                     if (isUnique) {
-                        acc_num = id + br + string(c, 5);
+                        account_number = id + br + string(c, 5);
 
                         for (int j = 0; j < i; j++) {
-                            if (Acc[j] == acc_num) {
+                            if (Acc[j] == account_number) {
                                 isUnique = false;
                                 cout << "Account number already exists. Please enter a new one." << endl;
                                 break;
@@ -57,7 +57,7 @@ public:
 
                 } while (!isUnique);
 
-                Acc[i] = acc_num;
+                Acc[i] = account_number;
 
                 cout << "Enter name: ";
                 cin.ignore();
@@ -68,8 +68,42 @@ public:
                 cin.ignore();
 
                 string ph;
+                bool validPh;
+                do {
+                    validPh = true;
+                    cout << "Enter registered phone number (10 digits): ";
+                    cin >> ph;
 
-                   
+                    if (ph.length() != 10) {
+                        cout << "Phone number must be exactly 10 digits. Please try again." << endl;
+                        validPh = false;
+                    }
+
+            for (int i = 0; i < ph.length(); i++) {
+            if (!isdigit(ph[i])) {
+                cout << "Phone number must contain only digits. Please try again." << endl;
+                validPh = false;
+                break;
+            }
+        }
+
+                    if (validPh) {
+            for (int i = 0; i < MAX_ACCOUNTS; i++) {
+                if (phone[i] == phone_number) {
+                    cout << "This phone number is already linked to another account. Please try a different one." << endl;
+                    validPhone = false;
+                    break;
+                }
+            }
+        }
+                } while (!validPhone);
+
+                phone[i] = phone_number;
+            }
+        } else {
+            cout << "Our bank has a limit of 100 users only." << endl;
+        }
+    }
 
     void display() {
         for (int i = 0; i < n; i++) {
@@ -82,7 +116,7 @@ public:
     }
 };
 
-class Account : public BaseAcc {
+class Account : public BaseAccount {
 public:
     void del_user() {
         string acc;
@@ -130,16 +164,16 @@ public:
         cout << "Account not found." << endl;
     }
 
-    void edit_user(string acc, string new_ph, bool isPhone) {
+    void edit_user(string acc, string new_phone, bool isPhone) {
         if (!isPhone) {
             cout << "Invalid parameter for phone editing." << endl;
             return;
         }
-        if (new_ph.length() != 10) {
+        if (new_phone.length() != 10) {
             cout << "Phone number must be exactly 10 digits." << endl;
             return;
         }
-        for (char digit : new_ph) {
+        for (char digit : new_phone) {
             if (!isdigit(digit)) {
                 cout << "Phone number must contain only digits." << endl;
                 return;
@@ -148,7 +182,7 @@ public:
 
         for (int i = 0; i < n; i++) {
             if (Acc[i] == acc) {
-                phone[i] = new_ph;
+                phone[i] = new_phone;
                 cout << "Phone number updated successfully." << endl;
                 return;
             }
