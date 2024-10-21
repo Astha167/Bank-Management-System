@@ -16,7 +16,9 @@ User-Friendly Interface: Provides an interactive menu-driven interface for easy 
 The project consists of the following classes:
 
 BaseAcc: Handles basic account-related functionalities such as account creation, display, and validation of unique account numbers and phone numbers.
+
 Account: Extends BaseAcc to include account deletion, searching, and editing features.
+
 Transaction: Inherits from Account to manage transactions such as deposits, withdrawals, and money transfers.
 
 # Menu Options:
