@@ -69,7 +69,14 @@ public:
 
                 cout << "Enter balance: ";
                 cin >> balance[i];
-                cin.ignore();
+                if (balance[i]<0){
+                	cout<<"Wrong input as balance can't be negative.'";
+                	break;
+				}
+				if(balance[i]<1000){
+					cout<<"Entered account balance is less than min account balance of our bank.";
+					break;
+				}
 
                 string ph;
                 bool validph;
@@ -164,8 +171,15 @@ public:
 
                 cout << "Enter balance: ";
                 cin >> balance[i];
-                cin.ignore();
-
+                if(balance[i]<0){
+                	cout<<"Wrong input as balance can't be negative.";
+                	break;
+				}
+                if(balance[i]<1000){
+					cout<<"Entered account balance is less than min account balance of our bank.";
+					break;
+				}
+				
                 string ph;
                 bool validph;
                 do {
